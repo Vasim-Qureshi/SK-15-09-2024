@@ -49,6 +49,20 @@ export const deleteUserById = async (req, res) => {
         return res.status(500).send({message: 'Some error occured',error})
     }   
 }
+export const imageUpload = async(req,res)=>{
+    try {
+        if(!req.file)
+            return res.status(400).send({error:'No file uploaded'});
+        const id= req.user.id;
+        await UserModel.findByIdAndUpdate(id,{profile:`/images/${req.file.filename}`})
+        res.send({
+            message: 'Image uploaded successfully',
+            filename: req.file.filename
+        })
+    } catch (error) {
+        return res.status(500).send({message: 'Some error occured',error})
+    }
+}
 export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
